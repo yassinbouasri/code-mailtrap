@@ -9,10 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Zenstruck\Browser\Test\HasBrowser;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
+use Zenstruck\Mailer\Test\InteractsWithMailer;
+use Zenstruck\Mailer\Test\TestEmail;
 
 class BookingTest extends KernelTestCase
 {
-    use ResetDatabase, Factories, HasBrowser;
+    use ResetDatabase, Factories, HasBrowser, InteractsWithMailer;
 
     /**
      * @test
@@ -20,8 +22,8 @@ class BookingTest extends KernelTestCase
     public function testCreateBooking(): void
     {
         $trip = TripFactory::createOne([
-            'name' => 'Visit Mars',
-            'slug' => 'mars',
+            'name' => 'Visit Iss',
+            'slug' => 'iss',
             'tagLine' => 'The red planet',
         ]);
 
@@ -29,7 +31,8 @@ class BookingTest extends KernelTestCase
         CustomerFactory::assert()->empty();
 
         $this->browser()
-            ->visit('/trip/mars')
+            ->throwExceptions()
+            ->visit('/trip/iss')
             ->assertSuccessful()
             ->fillField('Name', 'Bruce Wayne')
             ->fillField('Email', 'bruce@wayne-enterprises.com')
@@ -37,7 +40,7 @@ class BookingTest extends KernelTestCase
             ->clickAndIntercept('Book Trip')
             ->assertRedirectedTo('/booking/'.BookingFactory::first()->getUid())
             ->assertSuccessful()
-            ->assertSeeIn('h1', 'Visit Mars')
+            ->assertSeeIn('h1', 'Visit Iss')
             ->assertSee('The red planet')
         ;
 
@@ -49,5 +52,15 @@ class BookingTest extends KernelTestCase
             ->count(1)
             ->exists(['trip'=>$trip, 'customer' => CustomerFactory::first()])
         ;
+
+        $this->mailer()
+            ->assertSentEmailCount(1)
+            ->assertEmailSentTo('bruce@wayne-enterprises.com', function (TestEmail $email) {
+                $email
+                    ->assertsubject('Booking confirmation for Visit Iss')
+                    ->assertContains('/booking/'.BookingFactory::first()->getUid())
+                    ->assertContains('Visit Iss')
+                    ->assertHasFile('Terms Of Service.pdf');
+            });
     }
 }
