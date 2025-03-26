@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Booking;
 use App\Entity\Customer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -47,5 +48,20 @@ class BookingRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    /**
+     * @return Booking[]
+     */
+    public function findBookingsToRemind(): array
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.reminderSentAt IS NULL')
+            ->andWhere('b.date <= :future')
+            ->andWhere('b.date > :now')
+            ->setParameter('future', new \DateTimeImmutable('+7 days'))
+            ->setParameter('now', new \DateTimeImmutable('now'))
+            ->getQuery()
+            ->getResult();
     }
 }
