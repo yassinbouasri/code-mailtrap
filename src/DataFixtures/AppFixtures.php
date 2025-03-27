@@ -84,5 +84,11 @@ class AppFixtures extends Fixture
             'trip' => $cybertron,
             'date' => new \DateTimeImmutable('-2 weeks'),
         ]);
+
+        BookingFactory::createOne([
+            'customer' => $clark,
+            'trip' => $arrakis,
+            'date' => new \DateTimeImmutable('+6 days'),
+        ]);
     }
 }

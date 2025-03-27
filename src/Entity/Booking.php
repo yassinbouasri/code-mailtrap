@@ -29,6 +29,9 @@ class Booking
     #[ORM\JoinColumn(nullable: false)]
     private Trip $trip;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $reminderSentAt = null;
+
     public function __construct(Customer $customer, Trip $trip, \DateTimeImmutable $date, ?string $uid = null)
     {
         $this->uid = $uid ?? ByteString::fromRandom();
@@ -60,5 +63,17 @@ class Booking
     public function getTrip(): ?Trip
     {
         return $this->trip;
+    }
+
+    public function getReminderSentAt(): ?\DateTimeImmutable
+    {
+        return $this->reminderSentAt;
+    }
+
+    public function setReminderSentAt(?\DateTimeImmutable $reminderSentAt): static
+    {
+        $this->reminderSentAt = $reminderSentAt;
+
+        return $this;
     }
 }
