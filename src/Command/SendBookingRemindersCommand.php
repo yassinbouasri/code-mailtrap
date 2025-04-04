@@ -52,7 +52,7 @@ class SendBookingRemindersCommand extends Command
                     'booking' => $booking,
                 ]);
 
-            $email->getHeaders()->add(new TagHeader('booking_remider'));
+            $email->getHeaders()->add(new TagHeader('booking_reminder'));
 
             $email->getHeaders()->add(new MetadataHeader('booking_uid', $booking->getUid()));
             $email->getHeaders()->add(new MetadataHeader('customer_uid', $customer->getUid()));
@@ -63,7 +63,7 @@ class SendBookingRemindersCommand extends Command
         }
         $this->entityManager->flush();
 
-        $io->success(sprintf('Send %d bookings reminders emails', count($bookings)));
+        $io->success(sprintf('Sent %d booking reminders', count($bookings)));
 
         return Command::SUCCESS;
     }
