@@ -46,7 +46,7 @@ class SendBookingRemindersCommandTest extends KernelTestCase
              ->assertSentEmailCount(1)
              ->assertEmailSentTo('john@doe.com', function (TestEmail $email) {
                  $email
-                     ->assertsubject('Booking confirmation for Visit Mars')
+                     ->assertsubject('Booking Reminder for Visit Mars')
                      ->assertContains('Visit Mars')
                      ->assertContains('/booking/'.BookingFactory::first()->getUid());
              });
