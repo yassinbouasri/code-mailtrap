@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Email\BookingEmailFactory;
 use App\Repository\BookingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -27,6 +28,7 @@ class SendBookingRemindersCommand extends Command
         private BookingRepository $bookingRepository,
         private EntityManagerInterface $entityManager,
         private MailerInterface $mailer,
+        private BookingEmailFactory $emailFactory
     )
     {
         parent::__construct();
@@ -39,25 +41,8 @@ class SendBookingRemindersCommand extends Command
         $io->title('Send bookings reminders');
         $bookings = $this->bookingRepository->findBookingsToRemind();
         foreach ($io->progressIterate( $bookings) as $booking) {
-            $trip = $booking->getTrip();
-            $customer = $booking->getCustomer();
 
-            $email = (new TemplatedEmail())
-                ->to(new Address($customer->getEmail(), $customer->getEmail()))
-                ->subject('Booking confirmation for '. $trip->getName())
-                ->htmlTemplate('email/booking_remider.html.twig')
-                ->context([
-                    'trip' => $trip,
-                    'customer' => $customer,
-                    'booking' => $booking,
-                ]);
-
-            $email->getHeaders()->add(new TagHeader('booking_reminder'));
-
-            $email->getHeaders()->add(new MetadataHeader('booking_uid', $booking->getUid()));
-            $email->getHeaders()->add(new MetadataHeader('customer_uid', $customer->getUid()));
-
-            $this->mailer->send($email);
+            $this->mailer->send($this->emailFactory->createBookingReminder($booking));
 
             $booking->setReminderSentAt(new \DateTimeImmutable('now'));
         }
