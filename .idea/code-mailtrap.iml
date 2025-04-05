@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="App\" />
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="App\Tests\" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/behat/mink" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
@@ -133,6 +134,9 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/mailtrap-mailer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/messenger" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/zenstruck/mailer-test" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/zenstruck/console-test" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/remote-event" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/webhook" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

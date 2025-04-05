@@ -13,6 +13,7 @@ framework:
             'Symfony\Component\Mailer\Messenger\SendEmailMessage': async
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
+            'Symfony\Component\RemoteEvent\Messenger\ConsumeRemoteEventMessage': async
 
 # when@test:
 #    framework:

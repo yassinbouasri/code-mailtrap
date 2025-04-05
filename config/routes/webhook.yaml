@@ -1,0 +1,7 @@
+webhook:
+    resource: '@FrameworkBundle/Resources/config/routing/webhook.xml'
+    prefix: /webhook
+framework:
+    webhook:
+        routing:
+            mailtrap: mailer.webhook.request_parser.mailtrap
